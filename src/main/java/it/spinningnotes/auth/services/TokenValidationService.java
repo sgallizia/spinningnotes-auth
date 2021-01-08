@@ -13,12 +13,15 @@ import it.spinningnotes.auth.models.Account;
 @Service
 public class TokenValidationService {
 	
-	@Value("${secretkey}")
+	@Value("${app.token.secretkey}")
 	private String secretKey;
+	
+	@Value("${app.token.issuer}")
+	private String issuer;
 	
 	public Account validate(String token) {
 		Algorithm algorithm = Algorithm.HMAC256(secretKey);
-		JWTVerifier verifier = JWT.require(algorithm).withIssuer("Spinning Notes").build();
+		JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build();
 		DecodedJWT decodedToken = verifier.verify(token);
 		Account account = new Account();
 		account.setEmail(decodedToken.getClaims().get("email").asString());

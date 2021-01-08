@@ -1,4 +1,4 @@
-package it.spinningnotes.auth.validator;
+package it.spinningnotes.auth.validators;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

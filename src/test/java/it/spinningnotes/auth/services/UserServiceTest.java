@@ -1,43 +1,45 @@
 package it.spinningnotes.auth.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
-
-import ch.qos.logback.core.encoder.Encoder;
 import it.spinningnotes.auth.entities.User;
 import it.spinningnotes.auth.models.Login;
 import it.spinningnotes.auth.repositories.UserRepository;
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@ContextConfiguration
+
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-	@MockBean
+	@Mock
 	UserRepository userRepository;
 	
-	@Autowired
+	@Spy
+	TokenService tokenService = new TokenService();
+	
+	@InjectMocks
 	UserService userService;
 	
-	@Autowired
-	PasswordEncoder encoder;
+	@Spy
+	PasswordEncoder encoder = new BCryptPasswordEncoder();
+	
+	@BeforeEach
+	public void setUp() {
+		ReflectionTestUtils.setField(tokenService, "secretKey", "testSecretKey");
+		ReflectionTestUtils.setField(tokenService, "issuer", "testIssuer");
+	}
 	
 	
 	@DisplayName("Test Sign up with correct information")

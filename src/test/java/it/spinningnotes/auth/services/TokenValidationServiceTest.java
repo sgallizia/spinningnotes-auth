@@ -3,26 +3,30 @@ package it.spinningnotes.auth.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
 import it.spinningnotes.auth.entities.User;
 import it.spinningnotes.auth.models.Account;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TokenValidationServiceTest {
-	@Autowired
-	TokenValidationService tokenValidatonService;
-	@Value("${secretkey}")
-	private String secretKey;
+	
+	private TokenValidationService tokenValidatonService = new TokenValidationService();
+	private String secretKey = "testSecretKey";
+	private String issuer = "testIssuer";
+	
+	@BeforeEach
+	public void setUp() {
+		ReflectionTestUtils.setField(tokenValidatonService, "secretKey", secretKey);
+		ReflectionTestUtils.setField(tokenValidatonService, "issuer", issuer);
+	}
 	
 	@DisplayName("Test the validation of a valid token")
 	@Test
@@ -30,7 +34,7 @@ public class TokenValidationServiceTest {
 		User user = new User();
 		user.setEmail("test@test.it");
 		Algorithm algorithm = Algorithm.HMAC256(secretKey);
-		String token = JWT.create().withClaim("email", user.getEmail()).withIssuer("Spinning Notes").sign(algorithm);
+		String token = JWT.create().withClaim("email", user.getEmail()).withIssuer(issuer).sign(algorithm);
 		Account account = tokenValidatonService.validate(token);
 		assertEquals(true, user.getEmail().compareTo(account.getEmail()) == 0);	
 	}

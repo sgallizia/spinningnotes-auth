@@ -1,0 +1,18 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+spring:
+  application:
+    name: spinningnotes-auth
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+  data:
+    mongodb:
+      host: localhost
+app:
+  token:
+    secretkey: test
+    issuer: Spinning Notes  

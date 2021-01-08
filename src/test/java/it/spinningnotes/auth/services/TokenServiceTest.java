@@ -2,25 +2,29 @@ package it.spinningnotes.auth.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import it.spinningnotes.auth.entities.User;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TokenServiceTest {
-	@Autowired
-	TokenService tokenService;
-	@Value("${secretkey}")
-	private String secretKey;
+
+	private TokenService tokenService = new TokenService();
+	private String secretKey = "testSecretKey";
+	
+	@BeforeEach
+	public void setUp() {
+		ReflectionTestUtils.setField(tokenService, "secretKey", secretKey);
+	}
 	
 	@DisplayName("Test creation of the token")
 	@Test

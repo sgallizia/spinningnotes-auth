@@ -12,13 +12,15 @@ import it.spinningnotes.auth.entities.User;
 public class TokenService {
 
 
-	@Value("${secretkey}")
+	@Value("${app.token.secretkey}")
 	private String secretKey;
 	
+	@Value("${app.token.issuer}")
+	private String issuer;
 	
 	public String produce(User user) {
 		Algorithm algorithm = Algorithm.HMAC256(secretKey);
-		String token = JWT.create().withClaim("email", user.getEmail()).withIssuer("Spinning Notes").sign(algorithm);
+		String token = JWT.create().withClaim("email", user.getEmail()).withIssuer(issuer).sign(algorithm);
 		return token;
 	}
 

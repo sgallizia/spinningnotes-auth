@@ -2,22 +2,15 @@ package it.spinningnotes.auth;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import it.spinningnotes.auth.entities.User;
 import it.spinningnotes.auth.models.Account;
 import it.spinningnotes.auth.models.Login;
-import it.spinningnotes.auth.repositories.UserRepository;
 import it.spinningnotes.auth.services.TokenValidationService;
 import it.spinningnotes.auth.services.UserService;
 
